@@ -1,8 +1,18 @@
 {% extends "base.html" %}
+{% load core_extras %}
+
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+  <h2>Create Movie</h2>
+  
+  {% if messages.get %}
+    <div class="alert-message">
+      {{ messages.get }}
+    </div>
+  {% endif %}
+
+  <form method="post" action="{% url 'movies:create_view' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Movie</button>
+  </form>
 {% endblock %}

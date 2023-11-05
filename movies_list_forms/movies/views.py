@@ -14,20 +14,19 @@ def get_cookie_data(request):
             pass
     return movies
 
+
 def create_view(request):
     if request.method == 'POST':
         form = MovieForm(request.POST)
         if form.is_valid():
             movies = get_cookie_data(request)
-            print(movies)
             new_id = int(max(movies.keys(), default=0)) + 1
-            print(new_id)
             new_movie = form.cleaned_data
-            print(new_movie)
             new_movie['id'] = new_id
 
             if any(movie['name'].lower() == new_movie['name'].lower() for movie in movies.values()):
-                messages.error(request, 'Movie with the same name already exists.')
+                alert_message = "This movie name already exists. Cannot create a new movie with the same name as an already existing movie."
+                messages.error(request, alert_message)
                 return redirect('movies:create_view')
 
             movies[new_id] = new_movie
@@ -43,15 +42,12 @@ def edit_view(request, movie_id):
         form = MovieForm(request.POST)
         if form.is_valid():
             movies = get_cookie_data(request)
-            print(movies)
-            print(movie_id)
             new_movie = form.cleaned_data
-            print(new_movie)
             new_movie['id'] = movie_id
 
             if any(movie['name'].lower() == new_movie['name'].lower() for movie in movies.values()):
                 messages.error(request, 'Movie with the same name already exists.')
-                return redirect('movies:edit_view')
+                return redirect('movies:edit_view', movie_id=movie_id)  # Pass movie_id as a parameter
 
             movies[movie_id] = new_movie
             request.session['movie_data'] = json.dumps(movies)
@@ -59,7 +55,7 @@ def edit_view(request, movie_id):
             return redirect('movies:list_view')
     else:
         form = MovieForm()
-    return render(request, 'movies/create_view.html', {'form': form})
+    return render(request, 'movies/create_view.html', {'form': form, 'id': movie_id})
 
 def list_view(request):
     movies = get_cookie_data(request)
