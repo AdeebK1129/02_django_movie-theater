@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    {% for movie in movies %}
+        <h2>{{ movie.name }}</h2>
+        <p>Actors: {{ movie.actors }}</p>
+        <p>Year: {{ movie.year }}</p>
+        <a href="{% url 'edit_view' movie.id %}">Edit</a>
+        <!-- <a href="{% url 'delete' movie.id %}">Delete</a> -->
+    {% endfor %}
+    <a href="{% url 'create_view' %}">Create new movie</a>
+{% endblock %}

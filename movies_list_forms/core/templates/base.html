@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Movie Theater</title>
+</head>
+<body>
+    <header>
+        <h1>Your Movie Theater</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'movies:list_view' %}">Movie List</a></li>
+                <li><a href="{% url 'movies:create_view' %}">Create Movie</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Your Movie Theater</p>
+    </footer>
+</body>
+</html>
