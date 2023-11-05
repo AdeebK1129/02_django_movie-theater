@@ -19,8 +19,11 @@ def create_view(request):
         form = MovieForm(request.POST)
         if form.is_valid():
             movies = get_cookie_data(request)
+            print(movies)
             new_id = int(max(movies.keys(), default=0)) + 1
+            print(new_id)
             new_movie = form.cleaned_data
+            print(new_movie)
             new_movie['id'] = new_id
 
             if any(movie['name'].lower() == new_movie['name'].lower() for movie in movies.values()):
@@ -36,21 +39,27 @@ def create_view(request):
     return render(request, 'movies/create_view.html', {'form': form})
 
 def edit_view(request, movie_id):
-    movies = get_cookie_data(request)
-    movie = movies.get(movie_id, None)
-    if request.method == 'POST' and movie:
+    if request.method == 'POST':
         form = MovieForm(request.POST)
         if form.is_valid():
-            movies[movie_id]['name'] = form.cleaned_data['name']
-            movies[movie_id]['actors'] = form.cleaned_data['actors']
-            movies[movie_id]['year'] = form.cleaned_data['year']
+            movies = get_cookie_data(request)
+            print(movies)
+            print(movie_id)
+            new_movie = form.cleaned_data
+            print(new_movie)
+            new_movie['id'] = movie_id
 
-            response = redirect('movies:list_view')
-            response.set_cookie('movies', json.dumps(movies))
-            return response
+            if any(movie['name'].lower() == new_movie['name'].lower() for movie in movies.values()):
+                messages.error(request, 'Movie with the same name already exists.')
+                return redirect('movies:edit_view')
+
+            movies[movie_id] = new_movie
+            request.session['movie_data'] = json.dumps(movies)
+            messages.success(request, 'Movie edited successfully.')
+            return redirect('movies:list_view')
     else:
-        form = MovieForm(initial=movie)
-    return render(request, 'movies/edit_view.html', {'form': form, 'id': movie_id})
+        form = MovieForm()
+    return render(request, 'movies/create_view.html', {'form': form})
 
 def list_view(request):
     movies = get_cookie_data(request)

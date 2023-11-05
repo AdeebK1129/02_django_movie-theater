@@ -26,7 +26,10 @@
             </form>
           </td>
           <td>
-            <a href="{% url 'movies:edit_view' movie.id %}">Edit</a>
+            <form action="{% url 'movies:edit_view' movie.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit">Edit</button>
+            </form>
           </td>
         </tr>
       {% endfor %}
