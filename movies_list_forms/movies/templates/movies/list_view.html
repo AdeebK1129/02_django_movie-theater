@@ -1,11 +1,35 @@
 {% extends "base.html" %}
+{% load core_extras %}
+
 {% block content %}
-    {% for movie in movies %}
-        <h2>{{ movie.name }}</h2>
-        <p>Actors: {{ movie.actors }}</p>
-        <p>Year: {{ movie.year }}</p>
-        <a href="{% url 'edit_view' movie.id %}">Edit</a>
-        <!-- <a href="{% url 'delete' movie.id %}">Delete</a> -->
-    {% endfor %}
-    <a href="{% url 'create_view' %}">Create new movie</a>
+  <h2>Movie List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Actors</th>
+        <th>Year</th>
+        <th>Action</th>
+        <th>Action</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {% for movie in movies %}
+        <tr>
+          <td>{{ movie.name }}</td>
+          <td>{{ movie.actors }}</td>
+          <td>{{ movie.year }}</td>
+          <td>
+            <form action="{% url 'movies:delete_view' movie.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+          <td>
+            <a href="{% url 'movies:edit_view' movie.id %}">Edit</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
