@@ -30,6 +30,7 @@ def create_view(request):
             if any(movie['name'].lower() == new_movie['name'].lower() for movie in movies.values()):
                 sameName = True
                 messages.error(request, 'Movie with the same name already exists.')
+                print("Movie with the same name already exists.")
                 return render(request, 'movies/create_view.html', context={'sameName': sameName}) 
 
 
@@ -57,6 +58,7 @@ def edit_view(request, movie_id):
             if any(movie['name'].lower() == new_movie['name'].lower() for movie in movies.values()):
                 sameName = True
                 messages.error(request, 'Movie with the same name already exists.')
+                print("Movie with the same name already exists.")
                 return render(request, 'movies/edit_view.html', context={'sameName': sameName}) 
             movies[movie_id] = new_movie
             request.session['movie_data'] = json.dumps(movies)
