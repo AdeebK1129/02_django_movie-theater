@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load core_extras %}
+
+{% block content %}
+  <h2>Are you sure you'd like to delete this Movie?</h2>
+  <form action="{% url 'movies:delete_view' movie_id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, I am sure.</button>
+  </form>
+  <form action="{% url 'movies:list_view' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">No, take me back.</button>
+  </form>
+
+{% endblock %}

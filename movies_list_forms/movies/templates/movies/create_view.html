@@ -5,4 +5,7 @@
         {{ form.as_p }}
         <button type="submit">Submit</button>
     </form>
+{% if sameName == True %}
+    <h3>ERROR: Movie with the same name already exists.</h3>
+{% endif %}
 {% endblock %}

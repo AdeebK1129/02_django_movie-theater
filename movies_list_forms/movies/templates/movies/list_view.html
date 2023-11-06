@@ -20,7 +20,7 @@
           <td>{{ movie.actors }}</td>
           <td>{{ movie.year }}</td>
           <td>
-            <form action="{% url 'movies:delete_view' movie.id %}" method="post">
+            <form action="{% url 'movies:deleteConfirm_view' movie.id %}" method="post">
               {% csrf_token %}
               <button type="submit">Delete</button>
             </form>

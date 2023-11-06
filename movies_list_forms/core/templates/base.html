@@ -10,10 +10,7 @@
         <h1>Your Movie Theater</h1>
         <nav>
             <ul>
-                <li><a href="{% url 'movies:list_view' %}">Movie List</a></li>
-                <li><a href="{% url 'movies:create_view' %}">Create Movie</a></li>
-                <li><a href="{% if movie.id %}{% url 'movies:delete_view' movie.id %}{% endif %}">Delete Movie</a></li>
-                <li><a href="{% if movie and movie.id %}{% url 'movies:edit_view' movie.id %}{% endif %}">Edit Movie</a></li>
+                <li><a href="{% url 'movies:create_view' %}">Click here to Create Movie</a></li>
             </ul>
         </nav>
     </header>

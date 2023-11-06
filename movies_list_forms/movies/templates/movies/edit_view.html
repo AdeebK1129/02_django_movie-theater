@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+{% if sameName == True %}
+    <h1>ERROR: Movie with the same name already exists.</h1>
+{% endif %}
 {% endblock %}

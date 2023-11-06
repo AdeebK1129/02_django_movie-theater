@@ -15,6 +15,7 @@ def get_cookie_data(request):
     return movies
 
 def create_view(request):
+    sameName = False
     if request.method == 'POST':
         form = MovieForm(request.POST)
         if form.is_valid():
@@ -27,18 +28,22 @@ def create_view(request):
             new_movie['id'] = new_id
 
             if any(movie['name'].lower() == new_movie['name'].lower() for movie in movies.values()):
+                sameName = True
                 messages.error(request, 'Movie with the same name already exists.')
-                return redirect('movies:create_view')
+                return render(request, 'movies/create_view.html', context={'sameName': sameName}) 
+
 
             movies[new_id] = new_movie
             request.session['movie_data'] = json.dumps(movies)
             messages.success(request, 'Movie created successfully.')
+            print("successfully created movie.")
             return redirect('movies:list_view')
     else:
         form = MovieForm()
     return render(request, 'movies/create_view.html', {'form': form})
 
 def edit_view(request, movie_id):
+    sameName = False
     if request.method == 'POST':
         form = MovieForm(request.POST)
         if form.is_valid():
@@ -50,16 +55,17 @@ def edit_view(request, movie_id):
             new_movie['id'] = movie_id
 
             if any(movie['name'].lower() == new_movie['name'].lower() for movie in movies.values()):
+                sameName = True
                 messages.error(request, 'Movie with the same name already exists.')
-                return redirect('movies:edit_view')
-
+                return render(request, 'movies/edit_view.html', context={'sameName': sameName}) 
             movies[movie_id] = new_movie
             request.session['movie_data'] = json.dumps(movies)
             messages.success(request, 'Movie edited successfully.')
+            print("successfully edited movie.")
             return redirect('movies:list_view')
     else:
         form = MovieForm()
-    return render(request, 'movies/create_view.html', {'form': form})
+    return render(request, 'movies/edit_view.html', {'form': form})
 
 def list_view(request):
     movies = get_cookie_data(request)
@@ -73,7 +79,11 @@ def delete_view(request, movie_id):
             del movies[str(movie_id)]
             request.session['movie_data'] = json.dumps(movies)
             messages.success(request, 'Movie deleted successfully.')
+            print("successfully deleted movie.")
             return redirect('movies:list_view')
         else:
             messages.error(request, 'Movie not found.')
             return redirect('movies:list_view')
+
+def deleteConfirm_view(request, movie_id):
+    return render(request, 'movies/deleteConfirm_view.html', {'movie_id': movie_id})
